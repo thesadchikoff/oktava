@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String           @id @default(uuid())
+  first_name      String
+  email           String
+  company         String
+  phone           String?
+  testing_session TestingSession[]
+
+  @@map("users")
+}
+
+model TestingSession {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  score       Int
+  user_id     String
+  is_complete Boolean  @default(false)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@map("testing_sessions")
+}
+
+model Category {
+  id            String   @id @default(uuid())
+  category_name String
+  is_hard       Boolean?
+  test          Test[]
+
+  @@map("categories")
+}
+
+model Test {
+  id          String     @id @default(uuid())
+  test_name   String
+  category    Category   @relation(fields: [category_id], references: [id])
+  category_id String
+  questions   Question[]
+  timer       DateTime?
+
+  @@map("tests")
+}
+
+model Question {
+  id                   String          @id @default(uuid())
+  question_name        String
+  question_description String?
+  correct_answer       CorrectAnswer[]
+  test                 Test?           @relation(fields: [test_id], references: [id], onDelete: Cascade)
+  test_id              String?
+  answer               Answer[]
+  type                 TESTTYPE        @default(Standard)
+  photo_answer         PhotoAnswer[]
+
+  @@map("questions")
+}
+
+enum TESTTYPE {
+  Scenario
+  Standard
+}
+
+model Answer {
+  id          String   @id @default(uuid())
+  answer      String
+  question    Question @relation(fields: [question_id], references: [id], onDelete: Cascade)
+  question_id String
+
+  @@map("answers")
+}
+
+model PhotoAnswer {
+  id          String   @id @default(uuid())
+  photo_url   String
+  question    Question @relation(fields: [question_id], references: [id], onDelete: Cascade)
+  question_id String
+
+  @@map("photo_answer")
+}
+
+model CorrectAnswer {
+  id          String    @id @default(uuid())
+  answer      String
+  question    Question? @relation(fields: [question_id], references: [id], onDelete: Cascade)
+  question_id String
+
+  @@map("correct_answers")
+}
