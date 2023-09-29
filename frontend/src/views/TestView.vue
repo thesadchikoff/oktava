@@ -29,13 +29,8 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import router from "@/router";
-
-interface ICompleteAnswer {
-    question_id: string
-    correct_answer: string,
-}
 
 import {computed, onMounted, ref} from "vue";
 import axios from "axios";

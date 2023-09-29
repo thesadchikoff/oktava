@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import {reactive, ref, watch} from "vue";
 import ArrowLeft from "@/components/icons/ArrowLeft.vue";
 import PrimaryButton from "@/components/PrimaryButton.vue";
@@ -48,10 +48,10 @@ const nextStep = () => {
     getAllCategories()
     steps.step = steps.step + 1
     if (!steps.data.personal_information.name && !steps.data.personal_information.email && !steps.data.personal_information.company) {
-        steps.data.personal_information.name = personal_information.name as string
-        steps.data.personal_information.email = email.value as string
-        steps.data.personal_information.company = personal_information.company as string
-        steps.data.personal_information.phone = personal_information.phone as string
+        steps.data.personal_information.name = personal_information.name
+        steps.data.personal_information.email = email.value
+        steps.data.personal_information.company = personal_information.company
+        steps.data.personal_information.phone = personal_information.phone
     }
 }
 
